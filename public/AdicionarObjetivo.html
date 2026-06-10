@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoTask</title>
+</head>
+<style>
+    #Container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        /* ocupa a tela toda */
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+
+    #Filho {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1.5rem 2rem;
+        width: 100%;
+        max-width: 360px;
+    }
+
+
+    /* Melhora o espaçamento dos campos */
+    #meuForm label {
+        display: block;
+        margin-bottom: 12px;
+        font-size: 14px;
+    }
+
+    #meuForm input[type="text"],
+    #meuForm input[type="number"] {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 4px;
+    }
+
+    #meuForm input[type="submit"] {
+        display: block;
+        width: 100%;
+        margin-top: 16px;
+        cursor: pointer;
+    }
+
+    #botao-voltar {
+        display: block;
+        margin-left: auto;
+    }
+
+    #Descricao {
+        resize: none;
+    }
+</style>
+
+<body>
+
+    <div id="Container">
+        <!--Daqui será feita a adição de objetivos no Banco de dados -->
+        <div id="Filho">
+            <input type="button" onclick="location.href='Index.html'" value="Voltar" id="botao-voltar" />
+            <h3 style="display: inline;">Adicionar objetivo</h3>
+
+            <form id="meuForm">
+                <label for="nome-objetivo">Nome do objetivo:
+                    <input type="text" id="nome-objetivo" name="nome-objetivo" maxlength="30">
+                </label>
+                <br>
+                <label for="Descricao">Descrição:
+                    <textarea id="Descricao" name="Descricao" maxlength="300" wrap="soft" rows="10"
+                        cols="47"></textarea>
+                </label>
+                <br>
+
+                <fieldset>
+                    <legend>Iniciar hoje?</legend>
+                    <label for="Iniciar-Hoje">Sim
+                        <input type="radio" name="Iniciar-Hoje" value="Sim">
+                    </label>
+                    <Label for="Descricao"> Não
+                        <input type="radio" name="Iniciar-Hoje" value="Não">
+                    </Label>
+                </fieldset>
+
+                <br>
+                <input type="submit" value="Enviar">
+            </form>
+
+        </div>
+    </div>
+    <script>
+        document.getElementById('meuForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('nome-objetivo').value
+            const descricao = document.getElementById('Descricao').value
+            const status = document.querySelector('input[name="Iniciar-Hoje"]:checked').value
+
+
+            //Criar
+            const response = await fetch(`http://localhost:3000/CREATE`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, descricao, status })
+            });
+
+            const dados = await response.json();
+
+            alert(dados.Mensagem)
+            window.location.href = 'Index.html';
+
+            document.getElementById('nome-objetivo').value = ""
+            document.getElementById('Descricao').value = ""
+            document.querySelectorAll('input[name="Iniciar-Hoje"]').forEach(radio => {
+                radio.checked = false
+            })
+        })
+    </script>
+</body>
+
+</html>

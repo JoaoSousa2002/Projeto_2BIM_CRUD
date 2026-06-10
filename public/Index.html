@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoTask</title>
+</head>
+<style>
+    table {
+        border-collapse: collapse;
+        border: 2px solid rgb(140 140 140);
+        font-family: sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+
+    thead,
+    tfoot {
+        background-color: rgb(228 240 245);
+    }
+
+    th,
+    td {
+        border: 1px solid rgb(160 160 160);
+        padding: 8px 10px;
+    }
+
+    td:last-of-type {
+        text-align: center;
+    }
+
+    tbody>tr:nth-of-type(even) {
+        background-color: rgb(237 238 242);
+    }
+    body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+</style>
+
+<body>
+
+    <h1>Lista de objetivos</h1>
+
+    <form id="meuForm">
+        <label for="nomeAluno">Nome do objetivo:
+            <input type="text" id="nome-objetivo">
+        </label>
+        <input type="submit" value="Pesquisar">
+        <input type="button" onclick="location.href='AdicionarObjetivo.html'" value="Adicionar objetivo">
+    </form>
+    <br>
+
+    <label for="Lista-objetivos">Lista de objetivo
+        <p style="display: inline;" id="Lista-objetivos"></p>
+        <div id="divHistorico">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">Objetivo</th>
+                        <th scope="col">Descrição</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Data inicio</th>
+                        <th scope="col">Data fim</th>
+                        <th scope="col">Opções</th>
+                    </tr>
+
+                </thead>
+                <tbody id="corpoTabelaObjetivos">
+                    <!-- Esse campo será preenchido pela função RenderizarTabelaHistorico pelo Javascript-->
+                </tbody>
+            </table>
+        </div>
+    </label>
+    </div>
+
+
+    <script>
+        let listaObjetivos = []
+
+        function editar(x) {
+            const objetivo = listaObjetivos.find(c => c.id === x);
+            localStorage.setItem('objetivoAtualizar', JSON.stringify(objetivo))
+            console.log(listaObjetivos[objetivo])
+            window.location.href = 'AtualizarObjetivo.html';
+        }
+        async function excluir(x) {
+            const response = await fetch(`http://localhost:3000/DELETE/?id=${x}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer YOUR_TOKEN' // Destructive actions usually require authentication
+                }
+
+            })
+            const data = await response.json();
+            alert(data.mensagem);
+            window.location.href = 'Index.html';
+        }
+
+        document.getElementById('meuForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            //Atualizar a pagina
+
+            const nomePesquisa = document.getElementById('nome-objetivo').value;
+
+            const response = await fetch(`http://localhost:3000/?nome=${nomePesquisa}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const dados = await response.json();
+            console.log('dados recebidos:', dados)
+            listaObjetivos = dados
+
+            // RenderizaTabelaObjetivos()
+            document.getElementById('corpoTabelaObjetivos').innerHTML = listaObjetivos.map(c =>
+                `
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.nome}</td>
+                    <td>${c.descricao}</td>
+                    <td>${c.status}</td>
+                    <td>${c.data_inicio ? new Date(c.data_inicio).toLocaleDateString('pt-BR') : ''}</td>
+                    <td>${c.data_fim ? new Date(c.data_fim).toLocaleDateString('pt-BR') : ''}</td>
+                    <td>
+                        <button onclick="editar(${c.id})">Editar</button>
+                    <br>
+                        <button onclick="excluir(${c.id})">Excluir</button>
+                    </td>
+                    </tr>
+            `).join("");
+            console.log("Renderizado")
+        })
+
+    </script>
+</body>
+
+</html>

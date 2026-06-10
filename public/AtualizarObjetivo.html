@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoTask</title>
+</head>
+<style>
+    #Container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        /* ocupa a tela toda */
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+
+    #Filho {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1.5rem 2rem;
+        width: 100%;
+        max-width: 360px;
+    }
+
+
+    /* Melhora o espaçamento dos campos */
+    #meuForm label {
+        display: block;
+        margin-bottom: 12px;
+        font-size: 14px;
+    }
+
+    #meuForm input[type="text"],
+    #meuForm input[type="number"] {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 4px;
+    }
+
+    #meuForm input[type="submit"] {
+        display: block;
+        width: 100%;
+        margin-top: 16px;
+        cursor: pointer;
+    }
+
+    #botao-voltar {
+        display: block;
+        margin-left: auto;
+    }
+
+    #Descricao {
+        resize: none;
+    }
+</style>
+
+<body>
+
+    <div id="Container">
+        <!--Daqui será feita a adição de objetivos no Banco de dados -->
+        <div id="Filho">
+            <input type="button" onclick="location.href='Index.html'" value="Voltar" id="botao-voltar" />
+            <h3 style="display: inline;">Atualizar objetivo</h3>
+
+            <form id="meuForm">
+
+                <label for="nome-objetivo">Nome do objetivo:
+                    <input type="text" id="nome-objetivo" name="nome-objetivo" maxlength="30">
+                </label>
+                <br>
+                <label for="Descricao">Descrição:
+                    <textarea id="Descricao" name="Descricao" maxlength="300" wrap="soft" rows="10"
+                        cols="47"></textarea>
+                </label>
+                <br>
+
+                <fieldset>
+                    <legend>Progresso</legend>
+                    <label for="Progresso">Não iniciado
+                        <input type="radio" name="Progresso" id="status" value="Não iniciado">
+                    </label>
+                    <Label for="Progresso"> Em progresso
+                        <input type="radio" name="Progresso" id="status" value="Em progresso">
+                    </Label>
+                    <label for="Progresso">Finalizado
+                        <input type="radio" name="Progresso" id="status" value="Finalizado">
+                    </label>
+                </fieldset>
+
+                <br>
+                <input type="submit" value="Enviar">
+            </form>
+
+        </div>
+    </div>
+    <script>
+        console.log(localStorage.getItem('objetivoAtualizar'));
+
+        //Converte a string do localstorage em JSON
+        listaAtualizar = JSON.parse(localStorage.getItem('objetivoAtualizar'))
+
+        //Coloca os dados do localstorage nos campos do formulario
+        document.getElementById('nome-objetivo').value = listaAtualizar.nome
+        document.getElementById('Descricao').value = listaAtualizar.descricao
+        const radio = document.querySelector(`input[name="Progresso"][value="${listaAtualizar.status}"]`);
+        if (radio) { radio.checked = true }
+
+        //Pega os dados do localStorage
+        const id = listaAtualizar.id
+        const data_inicio = listaAtualizar.data_inicio
+            ? listaAtualizar.data_inicio.split('T')[0]
+            : null
+
+        console.log(listaAtualizar.status)
+
+
+
+        document.getElementById('meuForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('nome-objetivo').value
+            const descricao = document.getElementById('Descricao').value
+            const status = document.querySelector('input[name="Progresso"]:checked').value;
+
+            const response = await fetch(`http://localhost:3000/UPDATE/`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, nome, descricao, status, data_inicio })
+            });
+            const data = await response.json();
+            console.log(data.mensagem)
+
+
+            window.location.href = 'Index.html';
+        })
+    </script>
+</body>
+
+</html>
