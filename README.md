@@ -19,10 +19,15 @@
    1. Na raiz do projeto, existe o arquivo **.env_**, renomeie para ".env" para que o backend possa usar os dados do servidor
    
    2. **DB_HOST**= IP do banco de dados, normalmente LocalHost
+
       **DB_USER**= Nome do usuario para conectar ao banco de dados
+
       **DB_PASS**= Senha do banco de dados, se não tiver coloque ""
+
       **DB_NAME**= ListaObjetivos (Nome da tabela usada no backend)
+
       **PORT**= Porta onde o servidor está rodando
+      
       **LS_PORT**= Porta onde o Live Server foi aberto (O padrão é 5500, mas se você tiver outro aberto, a porta muda)
 
 3. Iniciar o servidor Express (Backend)
