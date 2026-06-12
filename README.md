@@ -23,6 +23,7 @@
       DB_PASS= Senha do banco de dados, se não tiver coloque ""
       DB_NAME= ListaObjetivos (Nome da tabela usada no backend)
       PORT= Porta onde o servidor está rodando
+      LS_PORT= Porta onde o Live Server foi aberto (O pdrão é 5500, mas se você tiver outro aberto, a porta muda)
 
 3. Iniciar o servidor Express (Backend)
    

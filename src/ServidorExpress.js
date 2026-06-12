@@ -1,10 +1,11 @@
 const express = require('express');
 const cors = require('cors')
 const app = express();
+require('dotenv').config()
 
 const knex = require('./database/knex.js')
 
-app.use(cors({ origin: 'http://127.0.0.1:5500' }));
+app.use(cors({ origin: `http://127.0.0.1:${process.env.LS_PORT}` }));
 app.use(express.json());
 app.use(express.static('public'))
 
