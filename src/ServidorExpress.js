@@ -19,7 +19,7 @@ app.get('/', async (req, res) => {
     let objetivos;
 
     if (nome) {
-      objetivos = await knex('objetivos').where('nome', nome).select('*');
+      objetivos = await knex('objetivos').where('nome', 'like', `%${nome}%`).select('*')
     } else {
       objetivos = await knex('objetivos').select('*');
     }

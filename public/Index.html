@@ -7,12 +7,14 @@
     <title>ToDoTask</title>
 </head>
 <style>
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
     }
- 
+
     body {
         display: flex;
         flex-direction: column;
@@ -24,14 +26,14 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         font-size: 0.9rem;
     }
- 
+
     h1 {
         font-size: 1.4rem;
         font-weight: 600;
         margin-bottom: 1.5rem;
         letter-spacing: -0.02em;
     }
- 
+
     #meuForm {
         display: flex;
         align-items: center;
@@ -39,7 +41,7 @@
         margin-bottom: 1.5rem;
         flex-wrap: wrap;
     }
- 
+
     #meuForm label {
         font-size: 0.85rem;
         color: #444;
@@ -47,7 +49,7 @@
         align-items: center;
         gap: 0.4rem;
     }
- 
+
     input[type="text"] {
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -58,11 +60,11 @@
         background: #fff;
         color: #111;
     }
- 
+
     input[type="text"]:focus {
         border-color: #111;
     }
- 
+
     input[type="submit"],
     input[type="button"] {
         border: 1px solid #111;
@@ -74,29 +76,30 @@
         cursor: pointer;
         transition: background 0.15s, color 0.15s;
     }
- 
+
     input[type="submit"]:hover,
     input[type="button"]:hover {
         background: #fff;
         color: #111;
     }
- 
+
     #divHistorico {
         width: 100%;
         overflow-x: auto;
     }
- 
+
     table {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.83rem;
         letter-spacing: 0.01em;
+        table-layout: fixed;
     }
- 
+
     thead tr {
         border-bottom: 2px solid #111;
     }
- 
+
     th {
         padding: 0.6rem 0.9rem;
         text-align: left;
@@ -106,21 +109,25 @@
         letter-spacing: 0.05em;
         color: #444;
     }
- 
+
     td {
         padding: 0.6rem 0.9rem;
         border-bottom: 1px solid #e8e8e8;
         color: #111;
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
- 
+
     td:last-of-type {
         text-align: center;
     }
- 
+
     tbody tr:hover {
         background-color: #f7f7f7;
     }
- 
+
     button {
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -132,20 +139,19 @@
         transition: background 0.15s, border-color 0.15s;
         margin: 2px 0;
     }
- 
+
     button:hover {
         background: #111;
         color: #fff;
         border-color: #111;
     }
- 
+
     #Lista-objetivos {
         font-size: 0.85rem;
         color: #666;
         display: block;
         margin-bottom: 0.75rem;
     }
-
 </style>
 
 <body>
@@ -160,26 +166,26 @@
         <input type="button" onclick="location.href='AdicionarObjetivo.html'" value="Adicionar objetivo">
     </form>
     <br>
-        <p style="display: inline;" id="Lista-objetivos"></p>
-        <div id="divHistorico">
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">id</th>
-                        <th scope="col">Objetivo</th>
-                        <th scope="col">Descrição</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Data inicio</th>
-                        <th scope="col">Data fim</th>
-                        <th scope="col">Opções</th>
-                    </tr>
+    <p style="display: inline;" id="Lista-objetivos"></p>
+    <div id="divHistorico">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 80px;" >id</th>
+                    <th scope="col" style="width: 250px;">Objetivo</th>
+                    <th scope="col" style="width: 250px;">Descrição</th>
+                    <th scope="col" style="width: 120px;">Status</th>
+                    <th scope="col" style="width: 150px;">Data inicio</th>
+                    <th scope="col" style="width: 150px;">Data fim</th>
+                    <th scope="col" style="width: 80px;">Opções</th>
+                </tr>
 
-                </thead>
-                <tbody id="corpoTabelaObjetivos">
-                    <!-- Esse campo será preenchido pela função RenderizarTabelaHistorico pelo Javascript-->
-                </tbody>
-            </table>
-        </div>
+            </thead>
+            <tbody id="corpoTabelaObjetivos">
+                <!-- Esse campo será preenchido pela função RenderizarTabelaHistorico pelo Javascript-->
+            </tbody>
+        </table>
+    </div>
     </label>
     </div>
 
@@ -212,6 +218,7 @@
 
             const nomePesquisa = document.getElementById('nome-objetivo').value;
 
+            //Foi feito o uso de query no corpo do http pois o metodo get não recebe body como os demais
             const response = await fetch(`http://localhost:3000/?nome=${nomePesquisa}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
@@ -228,10 +235,10 @@
                     <td>${c.nome}</td>
                     <td>${c.descricao}</td>
                     <td>${c.status}</td>
-                    <td>${c.data_inicio ? new Date(c.data_inicio).toLocaleDateString('pt-BR') : ''}</td>
-                    <td>${c.data_fim ? new Date(c.data_fim).toLocaleDateString('pt-BR') : ''}</td>
+                    <td>${c.data_inicio ? new Date(c.data_inicio).toLocaleDateString('pt-BR') : '---'}</td>
+                    <td>${c.data_fim ? new Date(c.data_fim).toLocaleDateString('pt-BR') : '---'}</td>
                     <td>
-                        <button onclick="editar(${c.id})">Editar</button>
+                        <button onclick="editar(${c.id})">Ver/Editar</button>
                     <br>
                         <button onclick="excluir(${c.id})">Excluir</button>
                     </td>

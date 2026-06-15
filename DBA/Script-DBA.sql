@@ -13,8 +13,12 @@ CREATE TABLE `objetivos` (
 ) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `objetivos` (`nome`, `descricao`, `status`, `data_inicio`, `data_fim`) VALUES
-('Aprender Flask', 'Estudar o framework Flask para criar APIs com Python', 'Em progresso', '2025-06-01', '2025-07-01'),
-('Finalizar projeto CRUD', 'Concluir o projeto de Web II com todas as operações funcionando', 'Em progresso', '2025-05-15', '2025-06-30'),
-('Estudar para AWS', 'Revisar os serviços da AWS para a prova do 2º bimestre', 'Finalizado', '2025-04-01', '2025-05-20'),
-('Criar portfólio no GitHub', 'Subir todos os projetos da faculdade no GitHub organizadamente', 'Não iniciado', '2025-07-01', '2025-08-01'),
-('Aprender NumPy', 'Praticar manipulação de arrays e cálculos numéricos com NumPy', 'Não iniciado', '2025-07-15', '2025-08-15');
+('Aprender TypeScript', 'Estudar tipagem estática e migrar projetos JS para TS', 'Não iniciado', NULL, NULL),
+('Publicar vídeo no YouTube', 'Gravar vídeo sobre tecnologia e impacto social', 'Não iniciado', NULL, NULL),
+('Criar portfólio no GitHub', 'Organizar repositórios e documentar projetos com README detalhado', 'Não iniciado', NULL, NULL),
+('Concluir curso de AWS', 'Finalizar módulos restantes e obter certificação Cloud Practitioner', 'Em progresso', '2026-05-10', NULL),
+('Desenvolver API REST completa', 'Construir API com autenticação JWT e documentação Swagger', 'Em progresso', '2026-05-28', NULL),
+('Implementar testes no ToDoTask', 'Adicionar testes unitários e de integração no projeto', 'Em progresso', '2026-06-03', NULL),
+('Configurar CI/CD no GitHub Actions', 'Automatizar deploy da aplicação com pipeline de integração contínua', 'Finalizado', '2026-05-05', '2026-05-22'),
+('Modelar banco de dados do projeto', 'Criar e revisar a estrutura das tabelas no MySQL', 'Finalizado', '2026-05-01', '2026-05-12');
+
